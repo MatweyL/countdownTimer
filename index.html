@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Сайт</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header>
+		<nav>
+			
+		</nav>
+	</header>
+	<main>
+		<div class="full-page-block">
+			<div class="timer-container">
+				<div class="timer">
+					<div class="timer__title">До Нового года совсем чуть-чуть!</div>
+					<div class="circle-container">
+						<img src="Christmas_cat2.jpg" class="circle-container__img">
+					</div>
+					<div class="timer__countdown">
+						<div class="timer__remaining-time" id="days">
+							<div class="timer__number">23</div>
+							<div class="timer__number-description">Дня</div>
+						</div>
+						<div class="timer__remaining-time" id="hours">
+							<div class="timer__number">10</div>
+							<div class="timer__number-description">Часов</div>	
+						</div>
+						<div class="timer__remaining-time" id="minutes">
+							<div class="timer__number">35</div>
+							<div class="timer__number-description">Минут</div>
+						</div>
+						<div class="timer__remaining-time" id="seconds">
+							<div class="timer__number">25</div>
+							<div class="timer__number-description">секунд</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer>
+	</footer>
+<script type="text/javascript">
+	function initCountdownDate() {
+		let nextYear = (new Date()).getFullYear() + 1;
+		let nextYearMilliseconds = (new Date()).setFullYear(nextYear, 0, 1);
+		let nextYearDate = new Date();
+		nextYearDate.setTime(nextYearMilliseconds);
+		nextYearDate.setHours(0, 0, 0, 0);
+		return nextYearDate;
+	}
+
+
+	function getRequiredDateWord(number) {
+		let answer = [];
+		if (number % 10 == 1 && number != 11) {
+			//день, час минута, секунда
+			answer = ["день", "час", "минута", "секунда"];
+		}
+		else if (number % 100 == 0 || number % 100 >= 5 && number % 100 <= 20 || number % 100 >= 25 && number % 10 >= 5) {
+			//дней, часов, минут, секунд
+			answer = ["дней", "часов", "минут", "секунд"];
+		}
+		else {
+			//дня, часа, минуты, секунды
+			answer = ["дня", "часа", "минуты", "секунды"];
+		}
+		return answer;
+	}
+
+	function setRemainingTime(nextYearDate) {
+		let currentYearDate = new Date();//обновление текущей даты
+		if (currentYearDate > nextYearDate) {
+			nextYearDate = initCountdownDate();
+		}
+		let timeDifference = (nextYearDate - currentYearDate) / 1000;//разница во времени в секундах
+		let remainingDays =  Math.floor(timeDifference / 86400); //Дни
+		let remainingHours = Math.floor(timeDifference / 3600 % 24); //Часы
+		let remainingMinutes = Math.floor(timeDifference / 60 % 60); //минтуы
+		let remainingSeconds = Math.floor(timeDifference % 60); //секунды
+		let docRemainingDays = document.getElementById('days');
+		let docRemainingHours = document.getElementById('hours');
+		let docRemainingMinutes = document.getElementById('minutes');
+		let docRemainingSeconds = document.getElementById('seconds');
+		docRemainingDays.firstElementChild.textContent = remainingDays;
+		docRemainingDays.lastElementChild.textContent = getRequiredDateWord(remainingDays)[0];
+		docRemainingHours.firstElementChild.textContent = remainingHours;
+		docRemainingHours.lastElementChild.textContent =  getRequiredDateWord(remainingHours)[1];
+		docRemainingMinutes.firstElementChild.textContent = remainingMinutes;
+		docRemainingMinutes.lastElementChild.textContent =  getRequiredDateWord(remainingMinutes)[2];
+		docRemainingSeconds.firstElementChild.textContent = remainingSeconds;
+		docRemainingSeconds.lastElementChild.textContent =  getRequiredDateWord(remainingSeconds)[3];
+	}
+	const nextYearDate = initCountdownDate();
+	setRemainingTime(nextYearDate);
+	let runCountdown = setInterval(setRemainingTime, 1000, nextYearDate);
+
+	
+</script>
+</body>
+</html>
